@@ -1,3 +1,9 @@
 *.md
 *.pyc
+.git
+.DS_Store
+Dockerfile
+venv
+build
+__pycache__
 resources
