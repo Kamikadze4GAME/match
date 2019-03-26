@@ -22,11 +22,11 @@ setup(
         "numpy==1.16.2",
         "scipy==0.19.0",
         "flask==1.0.2",
-        "image-match==1.1.2",
+        # "image-match==1.1.2",
         "flasgger==0.9.2",
         "python-dotenv==0.10.1",
         "certifi==2019.3.9",
-        "elasticsearch==2.3.0",
+        # "elasticsearch==2.3.0",
     ],
     extras_require={
         "dev": [
