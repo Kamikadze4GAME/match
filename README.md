@@ -11,26 +11,45 @@
 
 ## Getting Started
 
-If you already have ElasticSearch running:
+### Requirements
+* Python 3.6
+* pip
+* ElasticSearch
+
+### Setup for Development
+* Clone the repo
+```sh
+$ git clone https://github.com/TRUEPIC/match.git
 ```
-$ docker run -e ELASTICSEARCH_URL=https://daisy.us-west-1.es.amazonaws.com -it dsys/match
+* Install in development mode
+```sh
+$ cd match
+$ pip install -e ".[dev, prod]"
+```
+* Initialize the pre-commit hooks
+```sh
+$ pre-commit install
+```
+* Set ELASTICSEARCH_URL variable
+```sh
+$ export ELASTICSEARCH_URL=https://<some_elasticsearch_cluster>
+```
+* Start the development web server
+```
+$ flask run --debugger --reload --port 5000
 ```
 
-If you want to run ElasticSearch locally as well, have [`docker-compose`](https://docs.docker.com/compose/) installed on your system, clone this repository and type:
+Once the flask server is running, the http endpoints are exposed on localhost:5000. The webserver will hot reload if any changes are made to the python files it depends on.
+
+Example Call:
+```sh
+$ curl -X GET http://localhost:5000/count
 ```
-$ make dev
+```json
+{"status": "ok", "error": [], "method": "count", "result": [1]}
 ```
 
-Match is packaged as a Docker container ([dsys/match](https://hub.docker.com/r/dsys/match/) on Docker Hub), making it highly portable and scalable to billions of images. You can configure a few options using environment variables:
-
-* **WORKER_COUNT** *(default: `4`)*
-
-  The number of gunicorn workers to spin up.
-
-* **ELASTICSEARCH_URL** *(default: `elasticsearch:9200`)*
-
-  A URL pointing to the Elasticsearch database where image signatures are to be stored. If you don't want to host your own Elasticsearch cluster, consider using [AWS Elasticsearch Service](https://aws.amazon.com/elasticsearch-service/). That's what we use.
-
+See [API](#api) for usage.
 
 ## API
 
