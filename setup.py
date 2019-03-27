@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="match",
-    version="0.0.1",
+    version="0.0.2",
     description="Truepic Image Matching Service",
     url="http://truepic.com",
     author="Truepic Inc.",
@@ -35,6 +35,9 @@ setup(
             "isort==4.3.4",
             "pylint==2.2.2",
             "pytest==4.0.1",
+            "pytest-cov==2.6.1",
+            "pytest-picked==0.4.0",
+            "pytest-sugar==0.9.2",
             "autoflake==1.2",
             "nose==1.3.7",
             "mypy==0.650",

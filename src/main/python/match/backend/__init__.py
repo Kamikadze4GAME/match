@@ -12,11 +12,12 @@ es_index = "image"
 es_doc_type = "image"
 all_orientations = True
 
+is_ssl = es_url.startswith("https")
 es = Elasticsearch(
     [es_url],
-    use_ssl=True,
-    ca_certs=certifi.where(),
-    verify_certs=True,
+    use_ssl=is_ssl,
+    ca_certs=certifi.where() if is_ssl else None,
+    verify_certs=is_ssl,
     timeout=60,
     max_retries=10,
     retry_on_timeout=True,
