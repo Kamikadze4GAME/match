@@ -1,10 +1,8 @@
 <p align="center"><img src="https://raw.githubusercontent.com/dsys/match/master/resources/logo.png" alt="logo" width="220" /></p>
 
-<p align="center"><strong>Scalable reverse image search</strong><br /><em>built on <a href="http://kubernetes.io/">Kubernetes</a> and <a href="https://www.elastic.co/">Elasticsearch</a></em></p>
+<p align="center"><strong>Scalable reverse image search</strong><br /></p>
 
-<p align="center"><a href="https://github.com/dsys/match/stargazers"><img src="https://img.shields.io/github/stars/dsys/match.svg?style=flat" alt="GitHub stars" /></a> <a href="https://hub.docker.com/r/dsys/match/"><img src="https://img.shields.io/docker/pulls/dsys/match.svg" alt="Docker Pulls" /></a> <a href="http://kubernetes.io"><img src="https://img.shields.io/badge/kubernetes-ready-brightgreen.svg?style=flat" alt="Kubernetes shield" /></a> <a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fdsys%2Fmatch?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fdsys%2Fmatch.svg?type=shield"/></a></p>
-
-**Match** makes it easy to search for images that look similar to each other. Using a state-of-the-art perceptual hash, it is invariant to scaling and 90 degree rotations. Its HTTP API is quick to integrate and flexible for a number of reverse image search applications. Kubernetes and Elasticsearch allow Match to scale to billions of images with ease while giving you full control over where your data is stored. Match uses the awesome [ascribe/image-match](https://github.com/ascribe/image-match) under the hood for most of the image search legwork.
+**Match** makes it easy to search for images that look similar to each other. Using a state-of-the-art perceptual hash, it is invariant to scaling and 90 degree rotations. Its HTTP API is quick to integrate and flexible for a number of reverse image search applications. Kubernetes and Elasticsearch allow Match to scale to billions of images with ease while giving you full control over where your data is stored. Match uses [ascribe/image-match](https://github.com/ascribe/image-match) under the hood for most of the image search legwork which, in turn, is based on the paper [_An image signature for any kind of image_, Goldberg et al](http://www.cs.cmu.edu/~hcwong/Pdfs/icip02.ps).
 
 1. [Getting Started](#getting-started)
 2. [API](#api)
@@ -33,90 +31,6 @@ Match is packaged as a Docker container ([dsys/match](https://hub.docker.com/r/d
 
   A URL pointing to the Elasticsearch database where image signatures are to be stored. If you don't want to host your own Elasticsearch cluster, consider using [AWS Elasticsearch Service](https://aws.amazon.com/elasticsearch-service/). That's what we use.
 
-* **ELASTICSEARCH_INDEX** *(default: images)*
-
-  The index in the Elasticsearch database where image signatures are to be stored.
-
-* **ELASTICSEARCH_DOC_TYPE** *(default: images)*
-
-  The doc type used for storing image signatures.
-
-
-### Using in your own Kubernetes cluster
-
-You can configure the service, replication controller, and secret like so:
-
-```yaml
-# match-service.yml
-apiVersion: v1
-kind: Service
-metadata:
-  name: match
-spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-  selector:
-    app: match
-```
-
-```yaml
-# match-rc.yml
-apiVersion: v1
-kind: ReplicationController
-metadata:
-  name: match
-spec:
-  replicas: 1
-  selector:
-    app: match
-  template:
-    metadata:
-      labels:
-        app: match
-    spec:
-      containers:
-      - name: match
-        image: dsys/match:latest
-        ports:
-        - containerPort: 80
-        env:
-        - name: WORKER_COUNT
-          value: "4"
-        - name: ELASTICSEARCH_URL
-          valueFrom:
-            secretKeyRef:
-              name: match
-              key: elasticsearch.url
-        - name: ELASTICSEARCH_INDEX
-          valueFrom:
-            secretKeyRef:
-              name: match
-              key: elasticsearch.index
-        - name: ELASTICSEARCH_DOC_TYPE
-          valueFrom:
-            secretKeyRef:
-              name: match
-              key: elasticsearch.doc-type
-```
-
-```yaml
-# match-secret.yml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: match
-data:
-  # https://daisy.us-west-1.es.amazonaws.com (change me)
-  elasticsearch.url: aHR0cHM6Ly9kYWlzeS51cy13ZXN0LTEuZXMuYW1hem9uYXdzLmNvbQ==
-
-  # images
-  elasticsearch.index: aW1hZ2Vz
-
-  # images
-  elasticsearch.doc-type: aW1hZ2Vz
-```
 
 ## API
 
@@ -307,16 +221,3 @@ Check for the health of the server.
   "result": []
 }
 ```
-
-## Development
-
-    $ export ELASTICSEARCH_URL=https://daisy.us-west-1.es.amazonaws.com
-    $ make build
-    $ make run
-    $ make push
-
-## License and Acknowledgements
-
-Match is based on [ascribe/image-match](https://github.com/ascribe/image-match), which is in turn based on the paper [_An image signature for any kind of image_, Goldberg et al](http://www.cs.cmu.edu/~hcwong/Pdfs/icip02.ps). There is an existing [reference implementation](https://www.pureftpd.org/project/libpuzzle) which may be more suited to your needs.
-
-Match itself is released under the [BSD 3-Clause license](https://github.com/dsys/match/blob/master/LICENSE). `ascribe/image-match` is released under the Apache 2.0 license.
