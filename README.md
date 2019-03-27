@@ -14,7 +14,7 @@
 ### Requirements
 * Python 3.6
 * pip
-* ElasticSearch
+* docker
 
 ### Setup for Development
 Clone the repo
@@ -30,9 +30,13 @@ Initialize the pre-commit hooks
 ```sh
 $ pre-commit install
 ```
+(Optional) Set up Elasticsearch in docker
+```sh
+$ docker run --name elastic -p 9200:9200 -t elasticsearch:6.4.2
+```
 Set ELASTICSEARCH_URL variable
 ```sh
-$ export ELASTICSEARCH_URL=https://<some_elasticsearch_cluster>
+$ export ELASTICSEARCH_URL=http://localhost:9200
 ```
 Start the development web server
 ```
