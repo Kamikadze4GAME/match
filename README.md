@@ -17,24 +17,24 @@
 * ElasticSearch
 
 ### Setup for Development
-* Clone the repo
+Clone the repo
 ```sh
 $ git clone https://github.com/TRUEPIC/match.git
 ```
-* Install in development mode
+Install in development mode
 ```sh
 $ cd match
 $ pip install -e ".[dev, prod]"
 ```
-* Initialize the pre-commit hooks
+Initialize the pre-commit hooks
 ```sh
 $ pre-commit install
 ```
-* Set ELASTICSEARCH_URL variable
+Set ELASTICSEARCH_URL variable
 ```sh
 $ export ELASTICSEARCH_URL=https://<some_elasticsearch_cluster>
 ```
-* Start the development web server
+Start the development web server
 ```
 $ flask run --debugger --reload --port 5000
 ```
