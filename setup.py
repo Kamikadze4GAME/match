@@ -28,7 +28,7 @@ setup(
         "certifi==2019.3.9",
         "elasticsearch==6.3.1",
     ],
-    extras_require={
+    extra_requires={
         "dev": [
             "pre-commit==1.14.4",
             "black==18.9b0",

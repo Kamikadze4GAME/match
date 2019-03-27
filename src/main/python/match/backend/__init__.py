@@ -3,9 +3,6 @@ import certifi
 import os
 from image_match.elasticsearch_driver import SignatureES
 from image_match.goldberg import ImageSignature
-from dotenv import load_dotenv
-
-load_dotenv(verbose=True)
 
 es_url = os.environ["ELASTICSEARCH_URL"]
 es_index = "image"

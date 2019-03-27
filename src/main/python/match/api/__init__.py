@@ -6,23 +6,13 @@ from match.api.exceptions import (
     server_error,
 )
 from match.api.routes import bp
-from flask_dotenv import DotEnv
 
 
 def create_app():
     """Flask application/config factory"""
     app = Flask(__name__)
-
-    _ = DotEnv(app=app)
-    # Elasticsearch Backend
-    # es.init_app(app)
-    # Signatures Elasticsearch Application
-    # ses.init_app(app)
-
     app = register_error_handlers(app)
-
     app.register_blueprint(bp)
-
     return app
 
 
