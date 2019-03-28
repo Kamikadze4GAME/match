@@ -62,20 +62,3 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
-      - deploy-staging-job:
-          requires:
-              - build-job
-          filters:
-              branches:
-                only: staging
-              tags:
-                only: /^s.*/
-      - deploy-production-job:
-          context: Deployment
-          requires:
-            - build-job
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /^v.*/
