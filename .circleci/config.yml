@@ -1,0 +1,80 @@
+# Python CircleCI 2.0 configuration file
+#
+version: 2
+jobs:
+  build-job:
+    docker:
+      - image: circleci/python:3.6.7
+	  - image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+        environment:
+          - cluster.name: group-project-test-cluster
+          - xpack.security.enabled: false
+          - transport.host: localhost
+          - network.host: 127.0.0.1
+          - http.port: 9250
+          - discovery.type: single-node
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - req-cache-{{ .Branch }}-{{ checksum "setup.py" }}
+      - run:
+            name: Install Dependencies
+            command: |
+                # Sytem Dependencies
+                echo "Updating apt"
+                sudo apt update
+                echo "Installing BLAS"
+                sudo apt install libopenblas-dev
+                echo "Installing fortran"
+                sudo apt install gfortran
+
+                # Create and source virtual environment
+                echo "Creating virtual environment"
+                python3 -m venv venv
+                source venv/bin/activate
+
+                # Quietly install checked-out pacakge
+                echo "Installing pip dependencies"
+                time pip install -q -e ".[dev]"
+      - save_cache:
+          key: req-cache-{{ .Branch }}-{{ checksum "setup.py" }}
+          paths:
+            - venv
+      - run:
+          name: Run Tests
+          command: |
+              source venv/bin/activate
+              export ELASTICSEARCH_URL=http://localhost:9200
+              pytest
+
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build-job:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - deploy-staging-job:
+          requires:
+              - build-job
+          filters:
+              branches:
+                only: staging
+              tags:
+                only: /^s.*/
+      - deploy-production-job:
+          context: Deployment
+          requires:
+            - build-job
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^v.*/
