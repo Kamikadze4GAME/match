@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, request
 
 # from match.backend import es
-from match.backend import ses
+from match.backend import ses, gis
 from match.utils import (
     ids_with_path,
     paths_at_location,
@@ -41,7 +41,7 @@ def delete_handler():
 @bp.route("/search", methods=["POST"])
 def search_handler():
     img, bs = get_image("url", "image")
-    ao = request.form.get("all_orientations", all_orientations) == "true"
+    ao = request.form.get("all_orientations", "true") == "true"
 
     matches = ses.search_image(path=img, all_orientations=ao, bytestream=bs)
 
