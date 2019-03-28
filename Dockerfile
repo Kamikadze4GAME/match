@@ -4,7 +4,10 @@ MAINTAINER Oliver Rice <oliver@truepic.com>
 RUN apt-get update && \
     apt-get install -y libopenblas-dev gfortran
 
-COPY src setup.py /
+WORKDIR /app
+
+ADD src /app/src
+COPY setup.py /app/
 
 RUN pip3.6 install numpy
 RUN pip3.6 install -e .
