@@ -4,7 +4,7 @@ version: 2
 jobs:
   build-job:
     docker:
-      - image: circleci/python:3.6.7
+      - image: circleci/python:3.6.5
       - image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
         environment:
           - cluster.name: group-project-test-cluster
@@ -39,7 +39,7 @@ jobs:
                 # Quietly install checked-out pacakge
                 echo "Installing pip dependencies"
                 pip install -U pip
-                time pip install -e "."
+                time pip install "."
       - save_cache:
           key: req-cache-{{ .Branch }}-{{ checksum "setup.py" }}
           paths:
