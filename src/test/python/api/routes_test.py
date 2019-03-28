@@ -37,21 +37,59 @@ def test_delete_handler(test_client):
     assert resp_json["method"] == "delete"
 
 
-def test_search_handler():
-    assert True
+def test_search_handler(test_client, test_image):
+    url = "/search"
+    data = {"image": (to_encoded_img(test_image), "test.jpg")}
+    resp = test_client.post(url, headers=HEADERS, data=data)
+    resp_json = json.loads(resp.data)
+    print(json.dumps(resp_json, indent=4))
+    assert resp_json["status"] == "ok"
+    assert resp_json["error"] == []
+    assert resp_json["result"] == []
+    assert resp_json["method"] == "search"
 
 
-def test_compare_handler():
-    assert True
+def test_compare_handler(test_client, test_image):
+    url = "/compare"
+    data = {
+        "image1": (to_encoded_img(test_image), "test1.jpg"),
+        "image2": (to_encoded_img(test_image), "test2.jpg"),
+    }
+    resp = test_client.post(url, headers=HEADERS, data=data)
+    resp_json = json.loads(resp.data)
+    print(json.dumps(resp_json, indent=4))
+    assert resp_json["status"] == "ok"
+    assert resp_json["error"] == []
+    assert resp_json["result"][0]["score"] == 100.0
+    assert resp_json["method"] == "compare"
 
 
-def test_count_handler():
-    assert True
+def test_count_handler(test_client):
+    url = "/count"
+    resp = test_client.get(url)
+    resp_json = json.loads(resp.data)
+    print(json.dumps(resp_json, indent=4))
+    assert resp_json["status"] == "ok"
+    assert resp_json["error"] == []
+    assert resp_json["result"][0] >= 0
+    assert resp_json["method"] == "count"
 
 
-def test_list_handler():
-    assert True
+def test_list_handler(test_client):
+    url = "/list"
+    resp = test_client.get(url)
+    resp_json = json.loads(resp.data)
+    print(json.dumps(resp_json, indent=4))
+    assert resp_json["status"] == "ok"
+    assert resp_json["error"] == []
+    assert isinstance(resp_json["result"], list)
+    assert resp_json["method"] == "list"
 
 
-def test_ping_handler():
-    assert True
+def test_ping_handler(test_client):
+    url = "/ping"
+    resp = test_client.get(url)
+    resp_json = json.loads(resp.data)
+    print(json.dumps(resp_json, indent=4))
+    assert resp_json["status"] == "ok"
+    assert resp_json["error"] == []

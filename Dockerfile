@@ -6,7 +6,6 @@ RUN apt-get update && \
 
 COPY server.py setup.py /
 
-RUN pip3.6 install "numpy==1.16.2"
 RUN pip3.6 install -e ".[prod]"
 
 
