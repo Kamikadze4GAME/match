@@ -38,7 +38,7 @@ jobs:
 
                 # Quietly install checked-out pacakge
                 echo "Installing pip dependencies"
-                pip install numpy
+                pip install -U pip
                 time pip install -e "."
       - save_cache:
           key: req-cache-{{ .Branch }}-{{ checksum "setup.py" }}
