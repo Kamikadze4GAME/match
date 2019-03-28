@@ -24,7 +24,7 @@ $ git clone https://github.com/TRUEPIC/match.git
 Install in development mode
 ```sh
 $ cd match
-$ pip install -e ".[dev,prod]"
+$ pip install -e .
 ```
 Initialize the pre-commit hooks
 ```sh
