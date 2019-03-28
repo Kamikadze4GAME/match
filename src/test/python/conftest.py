@@ -1,7 +1,6 @@
 import pytest
 from match.api import create_app
-import random
-
+import numpy as np
 from PIL import Image
 
 
@@ -17,12 +16,4 @@ def test_client():
 
 @pytest.fixture(scope="module")
 def test_image():
-    testImage = Image.new("RGB", (600, 600), (255, 255, 255))
-    pixel = testImage.load()
-    for x in range(600):
-        for y in range(600):
-            red = random.randrange(0, 255)
-            blue = random.randrange(0, 255)
-            green = random.randrange(0, 255)
-            pixel[x, y] = (red, blue, green)
-    return testImage
+    return Image.fromarray((np.random.rand(600, 600, 3) * 255).astype(np.uint8))
