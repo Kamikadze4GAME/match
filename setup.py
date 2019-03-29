@@ -26,7 +26,7 @@ setup(
         "flasgger==0.9.2",
         "python-dotenv==0.10.1",
         "certifi==2019.3.9",
-        "elasticsearch==6.3.1",
+        "elasticsearch==2.3.0",
         # Dev
         "pre-commit==1.14.4",
         "black==18.9b0",
