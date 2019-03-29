@@ -39,7 +39,6 @@ setup(
         "pytest-sugar==0.9.2",
         "autoflake==1.2",
         "nose==1.3.7",
-        "mypy==0.650",
         # Prod
         "gunicorn==19.9.0",
     ],
