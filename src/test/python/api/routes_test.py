@@ -1,8 +1,9 @@
 import io
 import json
+import uuid
 
 HEADERS = {"Content-Type": "multipart/form-data"}
-ADD_DEL_PATH = "/abc/123"
+ADD_DEL_PATH = "/test/" + str(uuid.uuid4())
 
 
 def to_encoded_img(img, format="jpeg"):
