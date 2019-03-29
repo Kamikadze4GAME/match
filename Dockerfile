@@ -9,7 +9,6 @@ WORKDIR /app
 ADD src /app/src
 COPY setup.py /app/
 
-RUN pip3.6 install numpy
 RUN pip3.6 install -e .
 
 
