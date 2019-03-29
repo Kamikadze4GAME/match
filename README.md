@@ -53,6 +53,16 @@ $ curl -X GET http://localhost:5000/count
 {"status": "ok", "error": [], "method": "count", "result": [1]}
 ```
 
+### Run Environment Locally
+Build the docker image
+```
+docker build -t truepic/match:0.0.5
+```
+Start compose
+```
+docker-compose up
+```
+
 See [API](#api) for usage.
 
 ## API
