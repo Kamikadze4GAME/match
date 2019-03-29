@@ -39,7 +39,6 @@ jobs:
                 # Quietly install checked-out pacakge
                 echo "Installing pip dependencies"
                 pip install -U pip
-                pip install numpy
                 time pip install -e "."
       - save_cache:
           key: req-cache-{{ .Branch }}-{{ checksum "setup.py" }}
@@ -50,7 +49,7 @@ jobs:
           command: |
               source venv/bin/activate
               export ELASTICSEARCH_URL=http://localhost:9200
-              pytest
+              pytest -v --disable-warnings
 
 
 workflows:
