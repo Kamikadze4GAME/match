@@ -1,10 +1,12 @@
 version: '2'
 services:
   match:
-    image: dsys/match:latest
+    image: truepic/match:0.0.5
     ports:
     - 8888:8888
-    command: ["/wait-for-it.sh", "-t", "60", "elasticsearch:9200", "--", "gunicorn", "-b", "0.0.0.0:8888", "-w", "4", "server:app"]
+    environment:
+    - ELASTICSEARCH_URL=elasticsearch:9200
+    - PORT=8888
     links:
     - elasticsearch
   elasticsearch:
