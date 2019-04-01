@@ -28,6 +28,7 @@ setup(
         "certifi==2019.3.9",
         "elasticsearch==6.3.0",
         "six==1.12.0",
+        "requests==2.21.0",
         # Dev
         "pre-commit==1.14.4",
         "black==18.9b0",
