@@ -10,6 +10,7 @@ from match.utils import (
     delete_ids,
     dist_to_percent,
     get_image,
+    sha256_bytestream,
 )
 
 bp = Blueprint("routes", __name__)
@@ -22,10 +23,11 @@ def add_handler():
     try:
         metadata = json.loads(request.form["metadata"])
     except KeyError:
-        metadata = None
-    img, bs = get_image("url", "image")
+        metadata = {}
+    img = get_image("url", "image")
+    metadata["sha256"] = sha256_bytestream(img)
     old_ids = ids_with_path(path)
-    ses.add_image(path, img, bytestream=bs, metadata=metadata)
+    ses.add_image(path, img, bytestream=True, metadata=metadata)
     delete_ids(old_ids)
     return json.dumps({"status": "ok", "error": [], "method": "add", "result": []})
 
@@ -40,10 +42,10 @@ def delete_handler():
 
 @bp.route("/search", methods=["POST"])
 def search_handler():
-    img, bs = get_image("url", "image")
+    img = get_image("url", "image")
     ao = request.form.get("all_orientations", "true") == "true"
 
-    matches = ses.search_image(path=img, all_orientations=ao, bytestream=bs)
+    matches = ses.search_image(path=img, all_orientations=ao, bytestream=True)
 
     return json.dumps(
         {
@@ -64,10 +66,10 @@ def search_handler():
 
 @bp.route("/compare", methods=["POST"])
 def compare_handler():
-    img1, bs1 = get_image("url1", "image1")
-    img2, bs2 = get_image("url2", "image2")
-    img1_sig = gis.generate_signature(img1, bytestream=bs1)
-    img2_sig = gis.generate_signature(img2, bytestream=bs2)
+    img1 = get_image("url1", "image1")
+    img2 = get_image("url2", "image2")
+    img1_sig = gis.generate_signature(img1, bytestream=True)
+    img2_sig = gis.generate_signature(img2, bytestream=True)
     score = dist_to_percent(gis.normalized_distance(img1_sig, img2_sig))
 
     return json.dumps(
